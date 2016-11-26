@@ -5,9 +5,9 @@ module ODFReport
     IMAGE_DIR_NAME = "Pictures"
 
     def find_image_name_matches(content)
-
       @images.each_pair do |image_name, path|
-        if node = content.xpath("//draw:frame[@draw:name='#{image_name}']/draw:image").first
+        name = image_name.upcase.to_s
+        if node = content.xpath("//draw:frame[@draw:name='#{name}']/draw:image").first
           placeholder_path = node.attribute('href').value
           @image_names_replacements[path] = ::File.join(IMAGE_DIR_NAME, ::File.basename(placeholder_path))
         end
@@ -16,7 +16,6 @@ module ODFReport
     end
 
     def replace_images(file)
-
       return if @images.empty?
 
       @image_names_replacements.each_pair do |path, template_image|
